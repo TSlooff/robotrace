@@ -11,16 +11,19 @@ public class ParametricTrack extends RaceTrack {
     
     @Override
     protected Vector getPoint(double t) {
-        Vector p = new Vector(10*cos(2*PI*t), 14*sin(2*PI*t), 1);
+        double x = 10*cos(2*PI*t);
+        double y = 14*sin(2*PI*t);
+        Vector p = new Vector(x, y, 1);
         return p;
 
     }
 
     @Override
     protected Vector getTangent(double t) {
-        Vector T = new Vector(-20*PI*sin(2*PI*t), 28*PI*cos(2*PI*t), 0);
+        double x = -20*PI*sin(2*PI*t);
+        double y = 28*PI*cos(2*PI*t);
+        Vector T = new Vector(x, y, 0);
         return T;
-
     }
     
 }
