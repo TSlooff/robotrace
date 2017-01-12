@@ -9,7 +9,10 @@ import static java.lang.Math.PI;
  */
 public class ParametricTrack extends RaceTrack {
     
-    boolean parametric = false;
+    @Override
+    public void setTrack() {
+        parametric = 1;
+    }
     
     @Override
     protected Vector getPoint(double t) {
