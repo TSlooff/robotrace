@@ -9,6 +9,8 @@ import static java.lang.Math.PI;
  */
 public class ParametricTrack extends RaceTrack {
     
+    boolean parametric = false;
+    
     @Override
     protected Vector getPoint(double t) {
         double x = 10*cos(2*PI*t);
