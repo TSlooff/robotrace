@@ -39,27 +39,48 @@ class Robot {
         //draw the robot here using a hierarchical model
         gl.glColor3i(0,0,0);
         drawLeg(gl, glu, glut, tAnim);
-        gl.glPushMatrix();
-         gl.glTranslated(2,0,0);
-         drawLeg(gl, glu, glut, tAnim);
-        gl.glPopMatrix();
+        drawArm(gl, glu, glut, tAnim);
+            gl.glPushMatrix();
+                gl.glTranslated(2,0,0);
+                drawLeg(gl, glu, glut, tAnim);
+            gl.glPopMatrix();
+            gl.glPushMatrix();
+                gl.glTranslated(-4,0,0);
+                drawArm(gl, glu, glut, tAnim);
+            gl.glPopMatrix();
+        drawTorso(gl, glu, glut, tAnim);
+        drawHead(gl, glu, glut, tAnim);
     }
     
     public void drawTorso(GL2 gl, GLU glu, GLUT glut, float tAnim) {
-        
+        gl.glPushMatrix();
+         gl.glTranslated(0, 0, 3);
+         gl.glScaled(3,2,3.5);
+         glut.glutSolidCube(1);
+        gl.glPopMatrix();
     }
     
     public void drawHead(GL2 gl, GLU glu, GLUT glut, float tAnim) {
-        
+         gl.glPushMatrix();
+         gl.glTranslated(0, 0, 5.5);
+         gl.glRotated(90,0,1,0);
+         gl.glRotated(90,0,0,1);
+         gl.glScaled(1.5,1.5,1.5);
+         glut.glutSolidTeapot(1);
+        gl.glPopMatrix();
     }
     
     public void drawArm(GL2 gl, GLU glu, GLUT glut, float tAnim) {
-        
+        gl.glPushMatrix();
+         gl.glTranslated(2, 0, 3.25);
+         gl.glScaled(1,1,3);
+         glut.glutSolidCube(1);
+        gl.glPopMatrix();
     }
     
     public void drawLeg(GL2 gl, GLU glu, GLUT glut, float tAnim) {
         gl.glPushMatrix();
-         gl.glTranslated(0.5, 0, 0.5);
+         gl.glTranslated(-1, 0, 0.5);
          gl.glScaled(1,1,2);
          glut.glutSolidCube(1);
         gl.glPopMatrix();
