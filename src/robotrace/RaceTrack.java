@@ -31,211 +31,34 @@ abstract class RaceTrack {
      * Draws this track, based on the control points.
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, Texture track, Texture brick) {
-        double stepsize = 0.01;
         
-        drawSides(gl, glu, glut, track, brick);
-        
-        track.enable(gl);
-        track.bind(gl);
-        
-        gl.glBegin(GL_TRIANGLE_STRIP);
-        gl.glColor3f(255, 0, 0);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                    p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                    T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            Vector p1 = new Vector(p.x + changeLane.x, p.y + changeLane.y, 1);
-            gl.glTexCoord2d(t, t);
-            gl.glVertex3d(p1.x, p1.y, p1.z);
-            Vector p2 = new Vector(p.x + 2*changeLane.x, p.y + 2*changeLane.y, 1);
-            gl.glTexCoord2d(1-t, 1-t);
-            gl.glVertex3d(p2.x, p2.y, p2.z);
-        }
-        gl.glEnd();
-                
-        gl.glBegin(GL_TRIANGLE_STRIP);
-        gl.glColor3f(0, 255, 0);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                    p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                    T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            gl.glVertex3d(p.x, p.y, p.z);
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            Vector p3 = new Vector(p.x + changeLane.x, p.y + changeLane.y, 1);
-            gl.glVertex3d(p3.x, p3.y, p3.z);
-        }
-        gl.glEnd();
-        
-        gl.glBegin(GL_TRIANGLE_STRIP);
-        gl.glColor3f(0, 0, 255);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                    p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                    T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            gl.glVertex3d(p.x, p.y, p.z);
-            Vector p4 = new Vector(p.x - changeLane.x, p.y - changeLane.y, 1);
-            gl.glVertex3d(p4.x, p4.y, p4.z);
-        }
-        gl.glEnd();
-        
-        gl.glBegin(GL_TRIANGLE_STRIP);
-        gl.glColor3f(255, 255, 0);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                    p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                    T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            Vector p4 = new Vector(p.x - changeLane.x, p.y - changeLane.y, 1);
-            gl.glVertex3d(p4.x, p4.y, p4.z);
-            Vector p5 = new Vector(p.x - 2*changeLane.x, p.y - 2*changeLane.y, 1);
-            gl.glVertex3d(p5.x, p5.y, p5.z);
-        }
-        gl.glEnd();
-                
-        gl.glBegin(GL_LINE_STRIP);
-        gl.glLineWidth(4);
-        gl.glColor3f(0, 0, 0);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                    p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                    T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            Vector p5 = new Vector(p.x - 2*changeLane.x, p.y - 2*changeLane.y, 1);
-            gl.glVertex3d(p5.x, p5.y, p5.z);
-        }
-        gl.glEnd();
-        
-        gl.glBegin(GL_LINE_STRIP);
-        gl.glLineWidth(4);
-        gl.glColor3f(0, 0, 0);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                    p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                    T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            Vector p3 = new Vector(p.x + 2*changeLane.x, p.y + 2*changeLane.y, 1);
-            gl.glVertex3d(p3.x, p3.y, p3.z);
-        }
-        gl.glEnd();
-        
-        track.disable(gl);
     }
     
-    public void drawSides(GL2 gl, GLU glu, GLUT glut, Texture track, Texture brick){
-        double stepsize = 0.01;
-        brick.enable(gl);
-        brick.bind(gl);
-        //draw inner side of track
-        gl.glBegin(GL_TRIANGLE_STRIP);
-        gl.glColor3f(255, 0, 0);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d); //normalize it
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            Vector p1 = new Vector(p.x + 2*changeLane.x, p.y + 2*changeLane.y, 1);
-            gl.glVertex3d(p1.x, p1.y, p1.z);
-            gl.glVertex3d(p1.x, p1.y, 0d);
+    private void setMaterial(Material material, GL2 gl) {
+        //Set material determined by given robot type
+        gl.glMaterialf(GL_FRONT, GL_SHININESS, material.shininess);
+        gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.diffuse, 0);
+        gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.specular, 0);
+    }
+    
+    public void setLaneColors(int lane_number, GL2 gl) {
+        switch (lane_number) {
+            case 0:
+                setMaterial(Material.GOLD, gl);
+                break;
+            case 1:
+                setMaterial(Material.SILVER, gl);
+                break;
+            case 2:
+                setMaterial(Material.WOOD, gl);
+                break;
+            case 3:
+                setMaterial(Material.ORANGE, gl);
+                break;
+            default:
+                setMaterial(Material.GOLD, gl);
+                break;
         }
-        gl.glEnd();
-        
-        //draw outer side of cube
-        gl.glBegin(GL_TRIANGLE_STRIP);
-        gl.glColor3f(255, 255, 0);
-        for (double t = 0; t<=1.01; t = t + stepsize) {
-            Vector p = new Vector(0,0,1);
-            Vector T = new Vector(0,0,1);
-            if (parametric == 1){
-                p = getPoint(t);
-                T = getTangent(t);
-            } else if (parametric == 0) {
-                    p = getCubicBezierPnt(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-                    T = getCubicBezierTng(t, new Vector(30,0,1), new Vector(30,20,1), new Vector(-30,20,1), new Vector(-30,0,1));
-            }
-            //calculate point in the next lane, use normal vector
-            Vector changeLane = new Vector(-T.y, T.x, 0d);
-            double length = Math.sqrt(changeLane.x * changeLane.x + changeLane.y * changeLane.y);
-            changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
-            changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
-            Vector p5 = new Vector(p.x - 2*changeLane.x, p.y - 2*changeLane.y, 1);
-            gl.glVertex3d(p5.x, p5.y, p5.z);
-            gl.glVertex3d(p5.x, p5.y, 0d);
-        }
-        gl.glEnd();
-        
-        brick.disable(gl);
     }
     
     /**

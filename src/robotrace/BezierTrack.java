@@ -122,27 +122,7 @@ public class BezierTrack extends RaceTrack {
             }
     }
     
-    public void setLaneColors(int lane_number, GL2 gl) {
-        switch (lane_number) {
-            case 0:
-                setMaterial(Material.GOLD, gl);
-                break;
-            case 1:
-                setMaterial(Material.SILVER, gl);
-                break;
-            case 2:
-                setMaterial(Material.WOOD, gl);
-                break;
-            case 3:
-                setMaterial(Material.ORANGE, gl);
-                break;
-            default:
-                setMaterial(Material.GOLD, gl);
-                break;
-        }
-    }
-    
-        private void drawTrack(List<Vector> points, List<Vector> offset_points, Double N, GL2 gl, Texture track, Texture brick) {
+    private void drawTrack(List<Vector> points, List<Vector> offset_points, Double N, GL2 gl, Texture track, Texture brick) {
         // Start using track texture.
         track.enable(gl);
         track.bind(gl);
@@ -185,10 +165,10 @@ public class BezierTrack extends RaceTrack {
         gl.glBegin(GL_QUADS);
         for (int i = 0; i < N; i++) {
             double[][] coordinates3d = new double[][]{
-                {points.get(i).x, points.get(i).y, points.get(i).z - 2},
-                {offset_points.get(i).x, offset_points.get(i).y, offset_points.get(i).z - 2},
-                {offset_points.get(i + 1).x, offset_points.get(i + 1).y, offset_points.get(i + 1).z - 2},
-                {points.get(i + 1).x, points.get(i + 1).y, points.get(i + 1).z - 2}};
+                {points.get(i).x, points.get(i).y, points.get(i).z - LANE_HEIGHT},
+                {offset_points.get(i).x, offset_points.get(i).y, offset_points.get(i).z - LANE_HEIGHT},
+                {offset_points.get(i + 1).x, offset_points.get(i + 1).y, offset_points.get(i + 1).z - LANE_HEIGHT},
+                {points.get(i + 1).x, points.get(i + 1).y, points.get(i + 1).z - LANE_HEIGHT}};
 
             gl.glNormal3d(0, 0, 1); // upwards pointing normal equal to z axis
             for (int j = 0; j < coordinates2d.length; j++) {
@@ -242,13 +222,6 @@ public class BezierTrack extends RaceTrack {
         }
         gl.glEnd();
 
-    }
-    
-    private void setMaterial(Material material, GL2 gl) {
-        //Set material determined by given robot type
-        gl.glMaterialf(GL_FRONT, GL_SHININESS, material.shininess);
-        gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.diffuse, 0);
-        gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.specular, 0);
     }
     
     @Override
