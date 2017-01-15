@@ -56,8 +56,10 @@ abstract class RaceTrack {
             changeLane = new Vector(changeLane.x/length, changeLane.y/length, 0d);
             changeLane = new Vector(changeLane.x * laneWidth, changeLane.y * laneWidth, changeLane.z * laneWidth);
             Vector p1 = new Vector(p.x + changeLane.x, p.y + changeLane.y, 1);
+            gl.glTexCoord2d(t, t);
             gl.glVertex3d(p1.x, p1.y, p1.z);
             Vector p2 = new Vector(p.x + 2*changeLane.x, p.y + 2*changeLane.y, 1);
+            gl.glTexCoord2d(1-t, 1-t);
             gl.glVertex3d(p2.x, p2.y, p2.z);
         }
         gl.glEnd();

@@ -114,7 +114,13 @@ public class RobotRace extends Base {
         float g = 3.5f;
         raceTracks[1] = new BezierTrack(
                 
-            new Vector[] {}
+                new Vector[]{new Vector(-15, 0, 1),
+            new Vector(-15, 15, 1),
+            new Vector(15, 15, 1),
+            new Vector(15, 0, 1),
+            new Vector(15, -15, 1),
+            new Vector(-15, -15, 1),
+            new Vector(-15, 0, 1)}
        
         );
         
@@ -152,6 +158,10 @@ public class RobotRace extends Base {
         ShaderPrograms.setupShaders(gl, glu);
         reportError("shaderProgram");
         
+        //enable texturing
+        gl.glEnable(GL_TEXTURE_2D);
+        gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        gl.glBindTexture(GL_TEXTURE_2D, 0);
     }
    
     /**
@@ -224,7 +234,7 @@ public class RobotRace extends Base {
         
         // Draw the race track.
         gl.glUseProgram(trackShader.getProgramID());
-        raceTracks[gs.trackNr].draw(gl, glu, glut, Texture track, Texture brick); //put in texture here
+        raceTracks[gs.trackNr].draw(gl, glu, glut, Textures.track, Textures.brick); //put in texture here
         
         // Draw the terrain.
         gl.glUseProgram(terrainShader.getProgramID());
