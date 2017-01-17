@@ -5,17 +5,9 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.util.texture.Texture;
 import java.util.ArrayList;
 import java.util.List;
-import static javax.media.opengl.GL.GL_FRONT;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 import javax.media.opengl.glu.GLU;
-import static javax.media.opengl.GL.GL_LINES;
-import static javax.media.opengl.GL2.*;
-import static robotrace.ShaderPrograms.*;
-import static robotrace.Textures.*;
 
 /**
  * Implementation of RaceTrack, creating a track from control points for a 

@@ -7,6 +7,9 @@
             <file>file:/C:/Users/s155411/Desktop/RobotRace/src/robotrace/BezierTrack.java</file>
             <file>file:/C:/Users/s155411/Desktop/RobotRace/src/robotrace/ParametricTrack.java</file>
             <file>file:/C:/Users/s155411/Desktop/RobotRace/src/robotrace/RobotRace.java</file>
+            <file>file:/C:/Users/s155411/Desktop/RobotRace/src/robotrace/ShaderPrograms.java</file>
+            <file>file:/C:/Users/s155411/Desktop/RobotRace/src/robotrace/shaderPrograms/Track/vertex.glsl</file>
+            <file>file:/C:/Users/s155411/Desktop/RobotRace/src/robotrace/shaderPrograms/Default/vertex.glsl</file>
             <file>file:/C:/Users/s155411/Desktop/RobotRace/src/robotrace/RaceTrack.java</file>
         </group>
     </open-files>
