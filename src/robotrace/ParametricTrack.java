@@ -7,17 +7,9 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.util.texture.Texture;
 import java.util.ArrayList;
 import java.util.List;
-import static javax.media.opengl.GL.GL_FRONT;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 import javax.media.opengl.glu.GLU;
-import static javax.media.opengl.GL.GL_LINES;
-import static javax.media.opengl.GL2.*;
-import static robotrace.ShaderPrograms.*;
-import static robotrace.Textures.*;
 /**
  * Implementation of RaceTrack, creating a track from a parametric formula
  */
@@ -48,7 +40,7 @@ public class ParametricTrack extends RaceTrack {
         Vector normal;
         
         //Loop through number of lanes.
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i+=2) {
                 //Loop through number of segements.
                 for (int j = 0; j < NSegment + 1; j++) {
 
@@ -87,7 +79,7 @@ public class ParametricTrack extends RaceTrack {
 
                     //Add normal to list of normals
                     //Add unit normal vector to point and scale to lane width
-                    Vector off = point.add(normal.normalized().scale((LANE_WIDTH * (i + 1))));
+                    Vector off = point.add(normal.normalized().scale((LANE_WIDTH * (i + 2))));
                     //Add offset point
                     offset_points.add(off);
 
@@ -113,21 +105,21 @@ public class ParametricTrack extends RaceTrack {
             }
     }
     
-    private void drawTrack(List<Vector> points, List<Vector> offset_points, Double N, GL2 gl, Texture track, Texture brick) {
+    private void drawTrack(List<Vector> points, List<Vector> offset_points, Double NSegment, GL2 gl, Texture track, Texture brick) {
         // Start using track texture.
         track.enable(gl);
         track.bind(gl);
         //Draw the sides of the lane
-        drawTrackLane(points, offset_points, N, gl);
+        drawTrackLane(points, offset_points, NSegment, gl);
         track.disable(gl);
         //Draw the flat top race track
         brick.enable(gl);
         brick.bind(gl);
-        drawTrackSides(points, offset_points, normals, N, gl);
+        drawTrackSides(points, offset_points, normals, NSegment, gl);
         brick.disable(gl);
     }
     
-    private void drawTrackLane(List<Vector> points, List<Vector> offset_points, Double N, GL2 gl) {
+    private void drawTrackLane(List<Vector> points, List<Vector> offset_points, Double NSegment, GL2 gl) {
         // 2D array to store the line translations
         int[][] coordinates2d = new int[][]{
             {0, 0},
@@ -137,7 +129,7 @@ public class ParametricTrack extends RaceTrack {
 
         // Draw the top of the track.
         gl.glBegin(GL_QUADS);
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < NSegment; i++) {
             double[][] coordinates3d = new double[][]{
                 {points.get(i).x, points.get(i).y, points.get(i).z},
                 {offset_points.get(i).x, offset_points.get(i).y, offset_points.get(i).z},
@@ -154,7 +146,7 @@ public class ParametricTrack extends RaceTrack {
 
         // Draw the bottom of the track.
         gl.glBegin(GL_QUADS);
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < NSegment; i++) {
             double[][] coordinates3d = new double[][]{
                 {points.get(i).x, points.get(i).y, points.get(i).z - LANE_HEIGHT},
                 {offset_points.get(i).x, offset_points.get(i).y, offset_points.get(i).z - LANE_HEIGHT},
@@ -170,7 +162,7 @@ public class ParametricTrack extends RaceTrack {
         gl.glEnd();
     }    
     
-    private void drawTrackSides(List<Vector> points, List<Vector> offset_points, List<Vector> normals, Double N, GL2 gl) {
+    private void drawTrackSides(List<Vector> points, List<Vector> offset_points, List<Vector> normals, Double NSegment, GL2 gl) {
         // 2D array to store the line translations
         int[][] coordinates2d = new int[][]{
             {0, 0},
@@ -185,7 +177,7 @@ public class ParametricTrack extends RaceTrack {
         //Draw sides of lane with squads.
         gl.glBegin(GL_QUADS);
         //Loop trhough number of segements
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < NSegment; i++) {
              // 3D array to store the line translations
              //Calculate points by point list and offset_list
              //We first draw the left side with lane height = LANE_HEIGHT;

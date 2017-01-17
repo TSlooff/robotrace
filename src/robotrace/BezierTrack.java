@@ -16,12 +16,12 @@ import javax.media.opengl.glu.GLU;
 public class BezierTrack extends RaceTrack {
     
     
-    private Vector[] controlPoints;
-    private double NSegment = 200d;
+    final private Vector[] controlPoints;
+    final private double NSegment = 200d;
     private List<Vector> normals;
     private List<Vector> offset_points;
     private List<Vector> points;
-    private float LANE_WIDTH = 1.22f;
+    final private float LANE_WIDTH = 1.22f;
     private final static int LANE_HEIGHT = 1;
     
     BezierTrack(Vector[] controlPoints) {
@@ -47,8 +47,8 @@ public class BezierTrack extends RaceTrack {
         
         //Loop through number of controlpoints with step of 3 (bezier curve)
             for (int k = 0; k < controlPoints.length - 1; k = k + 3) {
-                //Loop through number of lanes
-                for (int i = 0; i < 4; i++) {
+                //Loop through number of lanes (stepsize 2 since texture gives two lanes)
+                for (int i = 0; i < 4; i+=2) {
                     //Loop through number of segments
                     for (int j = 0; j < NSegment + 1; j++) {
 
@@ -83,8 +83,8 @@ public class BezierTrack extends RaceTrack {
                         normal = tangent.cross(new Vector(0, 0, -1));
                         normals.add(normal);
 
-                        //Add unit normal vector to point and scale to lane width
-                        Vector off = point.add(normal.normalized().scale((LANE_WIDTH * (i + 1))));
+                        //Add unit normal vector to point and scale to lane width (2 lanes because of given texture)
+                        Vector off = point.add(normal.normalized().scale((LANE_WIDTH * (i + 2))));
 
                         //Add offset point
                         offset_points.add(off);

@@ -165,7 +165,7 @@ public class RobotRace extends Base {
         
         // Add light source
         gl.glLightfv(GL_LIGHT0, GL_POSITION, new float[]{0f,0f,0f,1f}, 0);
-        gl.glEnable(GL_LIGHT0);
+        //gl.glEnable(GL_LIGHT0);
     }
    
     /**
