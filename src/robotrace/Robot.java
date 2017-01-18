@@ -19,21 +19,20 @@ class Robot {
     
     /** The direction in which the robot is running. */
     public Vector direction = new Vector(1, 0, 0);
+    
+    //Vector pointing upwards, used for crossproduct to calculate the upVector from the track
+    public Vector XVec = new Vector(1,0,0);
 
     /** The material from which this robot is built. */
     private final Material material;
     
-    
+    public float diff = 0f;
 
     /**
      * Constructs the robot with initial parameters.
      */
-    public Robot(Material material
-            
-    ) {
-        this.material = material;
-
-        
+    public Robot(Material material) {
+        this.material = material;    
     }
 
     /**
@@ -41,8 +40,19 @@ class Robot {
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
         //draw the robot here using a hierarchical model
-        gl.glTranslated(0,0,7.5);
+        float scaleFactor = 0.15f;
+        gl.glPushMatrix();
+        gl.glTranslated(position.x, position.y, position.z);
+        direction = direction.normalized();
+        
+        Vector upwardFromTrack = XVec.cross(direction); //vector pointing upwards from track, normalized
+        
+        gl.glRotated(90 + Math.acos(XVec.dot(direction)) / Math.PI * 180, upwardFromTrack.x,upwardFromTrack.y,upwardFromTrack.z);
+        //gl.glRotated(90, upwardFromTrack.x, upwardFromTrack.y, upwardFromTrack.z);
+        gl.glScaled(scaleFactor, scaleFactor, scaleFactor);
+        gl.glTranslated(0, 0, 7.5);
         drawHead(gl, glu, glut, tAnim, gs);
+        gl.glPopMatrix();
     }
     
     public void drawHead(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {

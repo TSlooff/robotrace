@@ -231,7 +231,13 @@ public class RobotRace extends Base {
         // Draw the (first) robot.
         gl.glUseProgram(robotShader.getProgramID()); 
         
-        robots[0].draw(gl, glu, glut, 0, gs);
+        for (int i = 0; i < robots.length; i++) {
+            float time = gs.tAnim / 30;
+            robots[i].position = raceTracks[gs.trackNr].getLanePoint(i, time);
+            robots[i].direction = raceTracks[gs.trackNr].getLaneTangent(i, time);
+            robots[i].draw(gl, glu, glut, time, gs);
+        }
+        //robots[0].draw(gl, glu, glut, 0, gs);
         
         
         // Draw the race track.
