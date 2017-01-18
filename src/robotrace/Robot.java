@@ -47,7 +47,7 @@ class Robot {
         
         Vector upwardFromTrack = XVec.cross(direction); //vector pointing upwards from track, normalized
         
-        gl.glRotated(90 + Math.acos(XVec.dot(direction)) / Math.PI * 180, upwardFromTrack.x,upwardFromTrack.y,upwardFromTrack.z);
+        gl.glRotated(Math.acos(XVec.dot(direction)) / Math.PI * 180, upwardFromTrack.x,upwardFromTrack.y,upwardFromTrack.z);
         //gl.glRotated(90, upwardFromTrack.x, upwardFromTrack.y, upwardFromTrack.z);
         gl.glScaled(scaleFactor, scaleFactor, scaleFactor);
         gl.glTranslated(0, 0, 7.5);
