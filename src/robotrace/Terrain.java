@@ -20,11 +20,12 @@ class Terrain {
      * Draws the terrain.
      */
     public void draw(GL2 gl, GLU glu, GLUT glut) {
-        for(float x = -50; x < 50; x ++) {	
+        float stepSize = 0.35f;
+        for(float x = -50; x < 50; x +=stepSize) {	
             gl.glBegin(GL_TRIANGLE_STRIP);	
-            for(float y = -50; y <= 50; y ++) {
+            for(float y = -50; y <= 50; y +=stepSize) {
                 gl.glVertex3f(x, y, 0 ); 
-                gl.glVertex3f(x + 1, y, 0); 
+                gl.glVertex3f(x + stepSize, y, 0); 
             }
             gl.glEnd();
         }
