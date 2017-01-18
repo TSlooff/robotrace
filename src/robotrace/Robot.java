@@ -39,6 +39,10 @@ class Robot {
      * Draws this robot (as a {@code stickfigure} if specified).
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+        
+        gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, this.material.diffuse, 0);
+        gl.glMaterialfv(GL_FRONT, GL_SPECULAR, this.material.specular, 0);
+        gl.glMaterialf(GL_FRONT, GL_SHININESS, this.material.shininess);
         //draw the robot here using a hierarchical model
         float scaleFactor = 0.15f;
         gl.glPushMatrix();
