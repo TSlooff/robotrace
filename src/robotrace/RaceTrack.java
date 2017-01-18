@@ -13,52 +13,85 @@ abstract class RaceTrack {
     
     /** The width of one lane. The total width of the track is 4 * laneWidth. */
     private final static float laneWidth = 1.22f;
-    
-    int parametric;
+    private final static float stepSize = 0.01f;
     
     /**
      * Constructor for the default track.
      */
     public RaceTrack() {
-        setTrack();
-    }
 
-    public void setTrack() {
-        parametric = 0;
     }
     
     /**
      * Draws this track, based on the control points.
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, Texture track, Texture brick) {
+        float stepSize = 0.01f;
+        // render top part
+        track.enable(gl);
+        track.bind(gl);
+        drawTrack(gl, glu, glut);
+        track.disable(gl);
         
+        brick.enable(gl);
+        brick.bind(gl);
+        drawSides(gl, glu, glut);
+        brick.disable(gl);
     }
     
-    private void setMaterial(Material material, GL2 gl) {
-        //Set material determined by given robot type
-        gl.glMaterialf(GL_FRONT, GL_SHININESS, material.shininess);
-        gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.diffuse, 0);
-        gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.specular, 0);
-    }
-    
-    public void setLaneColors(int lane_number, GL2 gl) {
-        switch (lane_number) {
-            case 0:
-                setMaterial(Material.GOLD, gl);
-                break;
-            case 1:
-                setMaterial(Material.SILVER, gl);
-                break;
-            case 2:
-                setMaterial(Material.WOOD, gl);
-                break;
-            case 3:
-                setMaterial(Material.ORANGE, gl);
-                break;
-            default:
-                setMaterial(Material.GOLD, gl);
-                break;
+    public void drawTrack(GL2 gl, GLU glu, GLUT glut){
+        
+        for(int lane = 0; lane < 4; lane++)
+        {
+            //gl.glBegin(GL_LINE_STRIP);	
+            gl.glBegin(GL_TRIANGLE_STRIP);	
+            boolean tex = false;
+            for(float i = 0; i <= 1.0f; i+= stepSize) {
+                Vector vector = getLanePoint(lane, i);
+                Vector tangent = getLaneTangent(lane, i);
+                Vector normal = tangent.cross(Vector.Z).normalized();
+                Vector vector1 = getLanePoint(lane, i).add(normal.scale(laneWidth/2));
+                Vector vector2 = getLanePoint(lane, i).add(normal.scale(-laneWidth/2));
+                gl.glTexCoord2d(0, tex?1:0);
+                gl.glVertex3d( vector2.x, vector2.y, vector2.z ); 
+                gl.glTexCoord2d(1, tex?1:0);
+                gl.glVertex3d( vector1.x, vector1.y, vector1.z ); 
+                tex = !tex;
+            }
+            gl.glEnd();
         }
+    }
+    
+    public void drawSides(GL2 gl, GLU glu, GLUT glut){
+        
+        gl.glBegin(GL_TRIANGLE_STRIP);	
+        for(float i = 0; i <= 1.0f; i+= stepSize) {
+            Vector vector = getLanePoint(0, i);
+            Vector tangent = getLaneTangent(0, i);
+            Vector normal = tangent.cross(Vector.Z).normalized();
+            Vector vector1 = getLanePoint(0, i).add(normal.scale(-laneWidth/2));
+            gl.glTexCoord2f(i * 20 % 1, 0);
+            gl.glVertex3d( vector1.x, vector1.y, vector1.z ); 
+            gl.glTexCoord2f(i * 20 % 1, 1);
+            gl.glVertex3d( vector1.x, vector1.y, vector1.z-2 ); 
+
+        }
+        gl.glEnd();
+        
+        gl.glBegin(GL_TRIANGLE_STRIP);	
+
+        for(float i = 0; i <= 1.0f; i+= stepSize) {
+            Vector vector = getLanePoint(3, i);
+            Vector tangent = getLaneTangent(3, i);
+            Vector normal = tangent.cross(Vector.Z).normalized();
+            Vector vector1 = getLanePoint(3, i).add(normal.scale(laneWidth/2));
+            gl.glTexCoord2f(i * 20 % 1, 0);
+            gl.glVertex3d( vector1.x, vector1.y, vector1.z ); 
+            gl.glTexCoord2f(i * 20 % 1, 1);
+            gl.glVertex3d( vector1.x, vector1.y,vector1.z -2); 
+
+        }
+        gl.glEnd();
     }
     
     /**
@@ -66,8 +99,10 @@ abstract class RaceTrack {
      * Use this method to find the position of a robot on the track.
      */
     public Vector getLanePoint(int lane, double t){
-
-        return Vector.O;
+        
+        Vector tangent = getLaneTangent(0, t);
+        Vector normal = tangent.cross(Vector.Z).normalized();
+        return getPoint(t).add(normal.scale(laneWidth * lane));    
 
     }
     
@@ -77,29 +112,12 @@ abstract class RaceTrack {
      */
     public Vector getLaneTangent(int lane, double t){
         
-        return Vector.O;
-
-    }
-    
-    private Vector getCubicBezierPnt(double t, Vector P0, Vector P1, Vector P2, Vector P3) {
-
-        //P(u)= (1-u)^3 * P0 + 3u(1-u)^2P1 + (1-u)3u^2P2 + u^3P3
-        Double x = Math.pow((1 - t), 3) * P0.x + 3 * t * Math.pow((1 - t), 2) * P1.x + 3 * Math.pow(t, 2) * (1 - t) * P2.x + Math.pow(t, 3) * P3.x;
-        Double y = Math.pow((1 - t), 3) * P0.y + 3 * t * Math.pow((1 - t), 2) * P1.y + 3 * Math.pow(t, 2) * (1 - t) * P2.y + Math.pow(t, 3) * P3.y;
-        Double z = Math.pow((1 - t), 3) * P0.z + 3 * t * Math.pow((1 - t), 2) * P1.z + 3 * Math.pow(t, 2) * (1 - t) * P2.z + Math.pow(t, 3) * P3.z;
-
-        return new Vector(x, y, z);
-    }
-    
-    private Vector getCubicBezierTng(double t, Vector P0, Vector P1, Vector P2, Vector P3) {
-
-        //To get the tangent we take the derivative
-        //P'(u) = 3 * (1-u)^2 * (P1 - P0) + 6 * (1-u) * u * (P2 - P1) + 3 * u^2 * (P3 - P2)
-        Double x = 3 * Math.pow(1 - t, 2) * (P1.x - P0.x) + 6 * (1 - t) * t * (P2.x - P1.x) + 3 * Math.pow(t, 2) * (P3.x - P2.x);
-        Double y = 3 * Math.pow(1 - t, 2) * (P1.y - P0.y) + 6 * (1 - t) * t * (P2.y - P1.y) + 3 * Math.pow(t, 2) * (P3.y - P2.y);
-        Double z = 3 * Math.pow(1 - t, 2) * (P1.z - P0.z) + 6 * (1 - t) * t * (P2.z - P1.z) + 3 * Math.pow(t, 2) * (P3.z - P2.z);
-
-        return new Vector(x, y, z);
+        if (lane == 0){ 
+            return getTangent(t);
+        }
+        else {// on other lanes tangent is changed
+            return getLanePoint(lane, t + 0.001).subtract(getLanePoint(lane, t));
+        }
     }
     
     // Returns a point on the test track at 0 <= t < 1.

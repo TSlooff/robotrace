@@ -111,15 +111,16 @@ public class RobotRace extends Base {
         raceTracks[0] = new ParametricTrack();
         
         // Track 2
-        float g = 3.5f;
         raceTracks[1] = new BezierTrack(
                 
-                new Vector[]{new Vector(-15, 0, 1),
+                new Vector[]{
+            new Vector(-15, 0, 1),
             new Vector(-15, 15, 1),
             new Vector(15, 15, 1),
             new Vector(15, 0, 1),
             new Vector(15, -15, 1),
             new Vector(-15, -15, 1),
+            new Vector(-10,-10, 1),
             new Vector(-15, 0, 1)}
        
         );
