@@ -1,9 +1,13 @@
 package robotrace;
 
 import com.jogamp.opengl.util.gl2.GLUT;
+import static java.lang.Math.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 import static javax.media.opengl.GL2.*;
+import static javax.media.opengl.GL3.GL_TIMESTAMP;
 
 /**
 * Represents a Robot, to be implemented according to the Assignments.
@@ -35,96 +39,203 @@ class Robot {
     /**
      * Draws this robot (as a {@code stickfigure} if specified).
      */
-    public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
         //draw the robot here using a hierarchical model
-    gl.glPushMatrix();
-    gl.glTranslated(0,0,1);
-    gl.glScaled(0.5,0.5,0.5);
-        drawUpperLeg(gl, glu, glut, tAnim);
-        drawUnderLeg(gl,glu,glut,tAnim);
-        drawFoot(gl,glu,glut,tAnim);
-        drawArm(gl, glu, glut, tAnim);
-        drawHand(gl, glu, glut, tAnim);
-            gl.glPushMatrix();
-                gl.glTranslated(2,0,0);
-                drawUpperLeg(gl, glu, glut, tAnim);
-                drawUnderLeg(gl, glu, glut, tAnim);
-                drawFoot(gl, glu, glut, tAnim);
-            gl.glPopMatrix();
-            gl.glPushMatrix();
-                gl.glTranslated(-4,0,0);
-                drawArm(gl, glu, glut, tAnim);
-                drawHand(gl, glu, glut, tAnim);
-            gl.glPopMatrix();
-        drawTorso(gl, glu, glut, tAnim);
-        drawHead(gl, glu, glut, tAnim);
-       
-    gl.glPopMatrix();
+        gl.glTranslated(0,0,7.5);
+        drawHead(gl, glu, glut, tAnim, gs);
     }
     
-    public void drawHead(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    public void drawHead(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
         gl.glColor3f(1, 0, 1 );
          gl.glPushMatrix();
-         gl.glTranslated(0, 0, 5.75);
          gl.glRotated(90,0,1,0);
          gl.glRotated(90,0,0,1);
+         gl.glRotated(15*sin(5*gs.tAnim),0,0,1);
          gl.glScaled(1.5,1.5,1.5);
          glut.glutSolidTeapot(1);
         gl.glPopMatrix();
+        drawTorso(gl, glu,glut,tAnim, gs);
     }
     
         
-    public void drawTorso(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    public void drawTorso(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
         gl.glColor3f(0, 1, 1 );
         gl.glPushMatrix();
-         gl.glTranslated(0, 0, 3);
+         gl.glTranslated(0, 0, -2.75);
          gl.glScaled(3,1,3.5);
          glut.glutSolidCube(1);
         gl.glPopMatrix();
+        drawRightArm(gl, glu, glut, tAnim, gs);
+        drawLeftUpperLeg(gl, glu, glut, tAnim, gs);
     }
     
-    public void drawArm(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    public void drawRightArm(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
         gl.glColor3f(0, 0, 1 );
         gl.glPushMatrix();
-         gl.glTranslated(2, 0, 3.25);
+         gl.glTranslated(2, 0, -2.5);
+         
+         gl.glRotated(-20*sin(5*gs.tAnim)+20,1,0,0);
+         gl.glTranslated(0,-0.1*sin(5*gs.tAnim)+0.1,0);
+          gl.glTranslated(0,-0.3*sin(5*gs.tAnim)+0.3,0);
+         
          gl.glScaled(1,1,3);
          glut.glutSolidCube(1);
         gl.glPopMatrix();
+        drawLeftArm(gl, glu, glut, tAnim, gs);
+        drawRightHand(gl, glu, glut, tAnim, gs);
     }
     
-    public void drawUpperLeg(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+      public void drawLeftArm(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+        gl.glColor3f(0, 0, 1 );
+        gl.glPushMatrix();
+         gl.glTranslated(-2, 0.25, -3);
+         gl.glRotated(-20*sin(-1)+20,1,0,0);
+         gl.glTranslated(0,-0.1*sin(-1)+0.1,0);
+          gl.glTranslated(0,-0.3*sin(-1)+0.3,0);
+          
+          gl.glRotated(20*sin(5*gs.tAnim)-20,1,0,0);
+         gl.glTranslated(0,0.1*sin(5*gs.tAnim)-0.1,0);
+          gl.glTranslated(0,0.3*sin(5*gs.tAnim)-0.3,0);
+          
+         gl.glScaled(1,1,3);
+         glut.glutSolidCube(1);
+        gl.glPopMatrix();
+        drawLeftHand(gl, glu, glut, tAnim, gs);
+    }
+    
+    public void drawLeftUpperLeg(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
         gl.glColor3f(1, 0, 0 );
         gl.glPushMatrix();
-         gl.glTranslated(-1, 0, 0.5);
+         gl.glTranslated(-1, 0, -5.25);
+         gl.glRotated(-20*sin(5*gs.tAnim)+20,1,0,0);
+         gl.glTranslated(0,-0.3*sin(5*gs.tAnim)+0.3,-0.05*sin(5*gs.tAnim)+0.05);
+         gl.glTranslated(0,-0.1*sin(5*gs.tAnim)+0.1,0);
          gl.glScaled(1,1,2);
          glut.glutSolidCube(1);
         gl.glPopMatrix();
+        drawRightUpperLeg(gl, glu, glut, tAnim, gs);
+        drawLeftUnderLeg(gl, glu, glut, tAnim, gs);
     }
     
-    public void drawUnderLeg(GL2 gl, GLU glu, GLUT glut, float tAnim) {
-        gl.glColor3f(1, 1, 0 );
+      public void drawRightUpperLeg(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+        gl.glColor3f(1, 0, 0 );
         gl.glPushMatrix();
-         gl.glTranslated(-1, 0, -1);
+         gl.glTranslated(1, 0, -5.25);
+         
+         gl.glRotated(-20*sin(-1)+20,1,0,0);
+         gl.glTranslated(0,-0.3*sin(-1)+0.3,-0.05*sin(-1)+0.05);
+         gl.glTranslated(0,-0.1*sin(-1)+0.1,0);
+         
+         gl.glRotated(20*sin(5*gs.tAnim)-20,1,0,0);
+         gl.glTranslated(0,0.275*sin(5*gs.tAnim)-0.275,0.2*sin(5*gs.tAnim)-0.2);
+         gl.glTranslated(0,0.075*sin(5*gs.tAnim)+0.075,0);
+         
          gl.glScaled(1,1,2);
          glut.glutSolidCube(1);
         gl.glPopMatrix();
+
+        drawRightUnderLeg(gl, glu, glut, tAnim, gs);
     }
     
-    public void drawFoot(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    public void drawLeftUnderLeg(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+        gl.glColor3f(1, 0, 0 );
+        gl.glPushMatrix();
+         gl.glTranslated(-1, 0, -6.75);
+         gl.glRotated(20*sin(5*gs.tAnim)-20,1,0,0);
+         gl.glTranslated(0,-0.05*sin(5*gs.tAnim)+0.05,-0.5*sin(5*gs.tAnim)+0.5);
+         gl.glTranslated(0,-0.1*sin(5*gs.tAnim)+0.1,0);
+         gl.glTranslated(0,0,-0.1*sin(5*gs.tAnim)+0.1);
+         gl.glScaled(1,1,2);
+         glut.glutSolidCube(1);
+        gl.glPopMatrix();
+        drawLeftFoot(gl, glu,glut, tAnim, gs);
+    }
+    
+    public void drawRightUnderLeg(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+        gl.glColor3f(1, 0, 0 );
+        gl.glPushMatrix();
+         gl.glTranslated(1, 0, -6.75);
+         gl.glRotated(20*sin(-1)-20,1,0,0);
+         gl.glTranslated(0,-0.05*sin(-1)+0.05,-0.5*sin(-1)+0.5);
+         gl.glTranslated(0,-0.2*sin(-1)+0.2,0);
+         gl.glTranslated(0,0,-0.1*sin(-1)+0.1);
+         
+         gl.glRotated(-20*sin(5*gs.tAnim)+20,1,0,0);
+         gl.glTranslated(0,0.22*sin(5*gs.tAnim)-0.22, 0.2*sin(5*gs.tAnim)-0.2);
+         gl.glTranslated(0,0.33*sin(5*gs.tAnim)-0.33,0);
+         gl.glTranslated(0,0,+0.1*sin(5*gs.tAnim)-0.1);
+         
+         gl.glScaled(1,1,2);
+         glut.glutSolidCube(1);
+        gl.glPopMatrix();
+        drawRightFoot(gl, glu,glut, tAnim, gs);
+    }
+    
+    public void drawLeftFoot(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
            gl.glColor3f(0, 0, 0 );
         gl.glPushMatrix();
-         gl.glTranslated(-1, 0.75, -1.75);
+         gl.glTranslated(-1, 0.75, -7.5);
+         gl.glRotated(20*sin(5*gs.tAnim)-20,1,0,0);
+         gl.glTranslated(0,-0.005*sin(5*gs.tAnim)+0.005,-0.2*sin(5*gs.tAnim)+0.2);
+         gl.glTranslated(0,-0.005*sin(5*gs.tAnim)+0.005,0);
+         gl.glTranslated(0,0,-0.1*sin(5*gs.tAnim)+0.1);
          gl.glScaled(1,0.5,0.5);
          glut.glutSolidCube(1);
         gl.glPopMatrix();
     }
     
-    public void drawHand(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    public void drawRightFoot(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+           gl.glColor3f(0, 0, 0 );
+        gl.glPushMatrix();
+         gl.glTranslated(1, 0.75, -7.5);
+         gl.glRotated(20*sin(-1)-20,1,0,0);
+         gl.glTranslated(0,-0.01*sin(-1)+0.01,-0.2*sin(-1)+0.2);
+         gl.glTranslated(0,-0.05*sin(-1)+0.05,0);
+         gl.glTranslated(0,0,-0.1*sin(-1)+0.1);
+         
+         gl.glRotated(-20*sin(5*gs.tAnim)+20,1,0,0);
+         gl.glTranslated(0,0.15*sin(5*gs.tAnim)-0.15,0.05*sin(5*gs.tAnim)-0.05);
+         gl.glTranslated(0,0.05*sin(5*gs.tAnim)-0.05,0);
+         gl.glTranslated(0,0,+0.1*sin(5*gs.tAnim)-0.1);
+         
+         gl.glScaled(1,0.5,0.5);
+         glut.glutSolidCube(1);
+        gl.glPopMatrix();
+    }
+    
+    public void drawLeftHand(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
         gl.glColor3f(0, 0, 0 );
         gl.glPushMatrix();
-         gl.glTranslated(2, 0, 1.5);
-         gl.glScaled(1,1,0.5);
-         glut.glutSolidCube(1);
+        gl.glTranslated(-2, 1.25, -4.5);
+        gl.glRotated(-20*sin(-1)+20,1,0,0);
+        gl.glTranslated(0,-0.1*sin(-1)+0.1,0);
+        gl.glTranslated(0,-0.25*sin(-1)+0.25,0);
+          
+        gl.glRotated(20*sin(5*gs.tAnim)-20,1,0,0);
+        gl.glTranslated(0,0.1*sin(5*gs.tAnim)-0.1,0.1*sin(5*gs.tAnim)-0.1);
+        gl.glTranslated(0,0.3*sin(5*gs.tAnim)-0.3,0);
+        gl.glTranslated(0,0.5*sin(5*gs.tAnim)-0.5,0);
+        gl.glScaled(0.5,1,1);
+        gl.glRotated(90,0,1,0);
+        gl.glRotated(90,0,0,1);
+        glut.glutSolidTeapot(1);
+        gl.glPopMatrix();
+    }
+    
+      public void drawRightHand(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+        gl.glColor3f(0, 0, 0 );
+        gl.glPushMatrix();
+        gl.glTranslated(2, 0.25, -4.4);
+        
+        gl.glRotated(-20*sin(5*gs.tAnim)+20,1,0,0);
+        gl.glTranslated(0,-0.1*sin(5*gs.tAnim)+0.1,0.1*sin(5*gs.tAnim)-0.1);
+        gl.glTranslated(0,-0.3*sin(5*gs.tAnim)+0.3,0);
+        gl.glTranslated(0,-0.5*sin(5*gs.tAnim)+0.5,0);
+         
+        gl.glScaled(0.5,1,1);
+        gl.glRotated(90,0,1,0);
+        gl.glRotated(90,0,0,1);
+        glut.glutSolidTeapot(1);
         gl.glPopMatrix();
     }
 }
