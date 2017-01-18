@@ -114,14 +114,14 @@ public class RobotRace extends Base {
         raceTracks[1] = new BezierTrack(
                 
                 new Vector[]{
-            new Vector(-15, 0, 1),
-            new Vector(-15, 15, 1),
-            new Vector(15, 15, 1),
-            new Vector(15, 0, 1),
-            new Vector(15, -15, 1),
-            new Vector(-15, -15, 1),
-            new Vector(-10,-10, 1),
-            new Vector(-15, 0, 1)}
+            new Vector(1.85, -7.5, 1),
+            new Vector(17, -1.3, 1),
+            new Vector(-0.7, 17.1, 1),
+            new Vector(-11.65, 8.8, 1),
+            new Vector(-11.65, 8.8, 1),
+            new Vector(-23, 0, 1),
+            new Vector(-24.47,-17.6, 1),
+            new Vector(1.85, -7.5, 1)}
        
         );
         

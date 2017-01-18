@@ -26,13 +26,14 @@ abstract class RaceTrack {
      * Draws this track, based on the control points.
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, Texture track, Texture brick) {
-        float stepSize = 0.01f;
-        // render top part
+        
+        // draw track
         track.enable(gl);
         track.bind(gl);
         drawTrack(gl, glu, glut);
         track.disable(gl);
         
+        //draw sides of track
         brick.enable(gl);
         brick.bind(gl);
         drawSides(gl, glu, glut);
@@ -41,21 +42,20 @@ abstract class RaceTrack {
     
     public void drawTrack(GL2 gl, GLU glu, GLUT glut){
         
-        for(int lane = 0; lane < 4; lane++)
-        {
+        for(int lane = 0; lane < 4; lane+=2) {
             gl.glBegin(GL_TRIANGLE_STRIP);	
-            boolean tex = false;
+            boolean top = false;
             for(float i = 0; i <= 1.0f; i+= stepSize) {
-                Vector vector = getLanePoint(lane, i);
+                Vector point = getLanePoint(lane, i);
                 Vector tangent = getLaneTangent(lane, i);
-                Vector normal = tangent.cross(Vector.Z).normalized();
-                Vector vector1 = getLanePoint(lane, i).add(normal.scale(laneWidth/2));
-                Vector vector2 = getLanePoint(lane, i).add(normal.scale(-laneWidth/2));
-                gl.glTexCoord2d(0, tex?1:0);
-                gl.glVertex3d( vector2.x, vector2.y, vector2.z ); 
-                gl.glTexCoord2d(1, tex?1:0);
-                gl.glVertex3d( vector1.x, vector1.y, vector1.z ); 
-                tex = !tex;
+                Vector normal = tangent.cross(new Vector(0,0,1)).normalized();
+                Vector outer_p = point.add(normal.scale(laneWidth/2 + laneWidth));
+                Vector inner_p = point.add(normal.scale(-laneWidth/2));
+                gl.glTexCoord2d(0, top?1:0);
+                gl.glVertex3d( inner_p.x, inner_p.y, inner_p.z ); 
+                gl.glTexCoord2d(1, top?1:0);
+                gl.glVertex3d( outer_p.x, outer_p.y, outer_p.z ); 
+                top = !top;
             }
             gl.glEnd();
         }
@@ -65,14 +65,14 @@ abstract class RaceTrack {
         
         gl.glBegin(GL_TRIANGLE_STRIP);	
         for(float i = 0; i <= 1.0f; i+= stepSize) {
-            Vector vector = getLanePoint(0, i);
+            Vector point = getLanePoint(0, i);
             Vector tangent = getLaneTangent(0, i);
-            Vector normal = tangent.cross(Vector.Z).normalized();
-            Vector vector1 = getLanePoint(0, i).add(normal.scale(-laneWidth/2));
+            Vector normal = tangent.cross(new Vector(0,0,1)).normalized();
+            Vector inner_p = point.add(normal.scale(-laneWidth/2));
             gl.glTexCoord2f(i * 20 % 1, 0);
-            gl.glVertex3d( vector1.x, vector1.y, vector1.z ); 
+            gl.glVertex3d( inner_p.x, inner_p.y, inner_p.z ); 
             gl.glTexCoord2f(i * 20 % 1, 1);
-            gl.glVertex3d( vector1.x, vector1.y, vector1.z-laneHeight ); 
+            gl.glVertex3d( inner_p.x, inner_p.y, inner_p.z-laneHeight ); 
 
         }
         gl.glEnd();
@@ -80,14 +80,14 @@ abstract class RaceTrack {
         gl.glBegin(GL_TRIANGLE_STRIP);	
 
         for(float i = 0; i <= 1.0f; i+= stepSize) {
-            Vector vector = getLanePoint(3, i);
+            Vector point = getLanePoint(3, i);
             Vector tangent = getLaneTangent(3, i);
-            Vector normal = tangent.cross(Vector.Z).normalized();
-            Vector vector1 = getLanePoint(3, i).add(normal.scale(laneWidth/2));
+            Vector normal = tangent.cross(new Vector(0,0,1)).normalized();
+            Vector outer_p = point.add(normal.scale(laneWidth/2));
             gl.glTexCoord2f(i * 20 % 1, 0);
-            gl.glVertex3d( vector1.x, vector1.y, vector1.z ); 
+            gl.glVertex3d( outer_p.x, outer_p.y, outer_p.z ); 
             gl.glTexCoord2f(i * 20 % 1, 1);
-            gl.glVertex3d( vector1.x, vector1.y,vector1.z -laneHeight); 
+            gl.glVertex3d( outer_p.x, outer_p.y,outer_p.z -laneHeight); 
 
         }
         gl.glEnd();
