@@ -29,6 +29,14 @@ class Terrain {
             }
             gl.glEnd();
         }
+        ShaderPrograms.defaultShader.useProgram(gl); //so nothing is done with the color
+        gl.glBegin(GL_QUADS);
+        gl.glColor4d(0.43921568627, 0.6862745098, 0.93725490196, 0.2);
+         gl.glVertex3f(-50f,-50f, 0f);
+         gl.glVertex3f(-50f,50f, 0f);
+         gl.glVertex3f(50f,50f, 0f);
+         gl.glVertex3f(50f,-50f, 0f);
+        gl.glEnd();
     }
     
 }
