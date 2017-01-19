@@ -1,7 +1,7 @@
 varying vec3 pos;
 
 float height(float x, float y) {
-    float z = 0.6*cos(0.3*x + 0.2*y) + 0.4 * cos(x - 0.5*y);
+    float z = 0.6*sin(0.5*x + 0.3*y) + 0.4 * cos(x - 0.5*y);
     return z;
 }
 

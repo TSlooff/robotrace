@@ -71,6 +71,8 @@ public class RobotRace extends Base {
     
     /** Instance of the terrain. */
     private final Terrain terrain;
+    
+    private final Tree[] trees;
         
     /**
      * Constructs this robot race by initializing robots,
@@ -82,25 +84,35 @@ public class RobotRace extends Base {
         robots = new Robot[4];
         
         // Initialize robot 0
-        robots[0] = new Robot(Material.GOLD
+        robots[0] = new Robot(Material.GOLD, 1.5f
                 
         );
         
         // Initialize robot 1
-        robots[1] = new Robot(Material.SILVER
+        robots[1] = new Robot(Material.SILVER, 5f
               
         );
         
         // Initialize robot 2
-        robots[2] = new Robot(Material.WOOD
+        robots[2] = new Robot(Material.WOOD, 3f
               
         );
 
         // Initialize robot 3
-        robots[3] = new Robot(Material.ORANGE
+        robots[3] = new Robot(Material.ORANGE, 2f
                 
         );
         
+        trees = new Tree[3];
+        
+        trees[0] = new Tree(3f, 5f
+                
+        );
+        trees[1] = new Tree( 2f, 1f
+        
+        );
+        
+        trees[2] = new Tree(1f, 3f);
         // Initialize the camera
         camera = new Camera();
         
@@ -114,14 +126,15 @@ public class RobotRace extends Base {
         raceTracks[1] = new BezierTrack(
                 
                 new Vector[]{
-            new Vector(1.85, -7.5, 1),
-            new Vector(17, -1.3, 1),
-            new Vector(-0.7, 17.1, 1),
-            new Vector(-11.65, 8.8, 1),
-            new Vector(-11.65, 8.8, 1),
-            new Vector(-23, 0, 1),
-            new Vector(-24.47,-17.6, 1),
-            new Vector(1.85, -7.5, 1)}
+                    new Vector(1.85, -7.5, 1),
+                    new Vector(18, -1.3, 2),
+                    new Vector(-0.7, 17.1, 3),
+                    new Vector(-11.65, 8.8, 3),
+                    new Vector(-11.65, 8.8, 3),
+                    new Vector(-23, 0, 2),
+                    new Vector(-24.47,-17.6, 1),
+                    new Vector(1.85, -7.5, 1)
+                }
        
         );
         
@@ -252,10 +265,13 @@ public class RobotRace extends Base {
         
         // Draw the terrain.
         gl.glUseProgram(terrainShader.getProgramID());
-        terrain.draw(gl, glu, glut);
+        terrain.draw(gl, glu, glut, gs.tAnim);
         reportError("terrain:");
         
-        
+        gl.glUseProgram(defaultShader.getProgramID());
+        trees[0].draw(gl, glu, glut, new Vector(25,30,5));
+        trees[1].draw(gl, glu, glut, new Vector(-25,-30,2));
+        trees[2].draw(gl, glu, glut, new Vector(30,30,3));
     }
     
     /**

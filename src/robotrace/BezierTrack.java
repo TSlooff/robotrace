@@ -17,7 +17,7 @@ public class BezierTrack extends RaceTrack {
     
     @Override
     protected Vector getPoint(double t) {
-        t %= 1;
+        t = t % 1;
         int NSegment = controlPoints.length/4;
         int currentSegment = (int)Math.floor(t*NSegment)*4;
         t = t * NSegment;
@@ -27,7 +27,7 @@ public class BezierTrack extends RaceTrack {
 
     @Override
     protected Vector getTangent(double t) {
-        t %= 1;
+        t = t % 1;
         int NSegment = controlPoints.length / 4;
         int currentSegment = (int)Math.floor(t * NSegment)*4;
         t = t * NSegment;

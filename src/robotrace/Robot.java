@@ -26,14 +26,16 @@ class Robot {
     public float diff = 0f;
     public float sprintAmount;
     public float sprintSpeed;
+    private float headSize; //add later
 
     /**
      * Constructs the robot with initial parameters.
      */
-    public Robot(Material material) {
+    public Robot(Material material, float headsize) {
         this.material = material;    
         sprintAmount = (float)Math.random() * 0.5f + 0.3f;
         sprintSpeed = (float)Math.random()*0.01f;
+        headSize = headsize;
     }
     
     private void calculateDiff(float tAnim) {
@@ -72,7 +74,8 @@ class Robot {
          gl.glRotated(90,0,1,0);
          gl.glRotated(90,0,0,1);
          gl.glRotated(15*sin(5*gs.tAnim),0,0,1);
-         gl.glScaled(1.5,1.5,1.5);
+         gl.glTranslated(0,headSize*headSize/10,0);
+         gl.glScaled(headSize,headSize,headSize);
          glut.glutSolidTeapot(1);
         gl.glPopMatrix();
         drawTorso(gl, glu,glut,tAnim, gs);

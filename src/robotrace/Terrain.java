@@ -19,7 +19,7 @@ class Terrain {
     /**
      * Draws the terrain.
      */
-    public void draw(GL2 gl, GLU glu, GLUT glut) {
+    public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim) {
         float stepSize = 0.35f;
         for(float x = -50; x < 50; x +=stepSize) {	
             gl.glBegin(GL_TRIANGLE_STRIP);	
@@ -29,14 +29,17 @@ class Terrain {
             }
             gl.glEnd();
         }
-        ShaderPrograms.defaultShader.useProgram(gl); //so nothing is done with the color
-        gl.glBegin(GL_QUADS);
+        ShaderPrograms.waterShader.useProgram(gl); //so nothing is done with the color
+        ShaderPrograms.waterShader.setUniform(gl, "tAnim", tAnim);
         gl.glColor4d(0.43921568627, 0.6862745098, 0.93725490196, 0.2);
-         gl.glVertex3f(-50f,-50f, 0f);
-         gl.glVertex3f(-50f,50f, 0f);
-         gl.glVertex3f(50f,50f, 0f);
-         gl.glVertex3f(50f,-50f, 0f);
-        gl.glEnd();
+        for(float x = -50; x < 50; x +=stepSize) {	
+            gl.glBegin(GL_TRIANGLE_STRIP);	
+            for(float y = -50; y <= 50; y +=stepSize) {
+                gl.glVertex3f(x, y, 0 ); 
+                gl.glVertex3f(x + stepSize, y, 0); 
+            }
+            gl.glEnd();
+        }
     }
     
 }

@@ -1,7 +1,8 @@
-varying vec3 pos;
+// simple vertex shader
+uniform float tAnim;
 
 float height(float x, float y) {
-    float z = 0.6*sin(0.5*x + 0.3*y) + 0.4 * cos(x - 0.5*y);
+    float z = 0.3* sin(15*x + tAnim * 2.0)+ 0.2* sin(67*x + tAnim * 1.4);
     return z;
 }
 
@@ -10,6 +11,6 @@ void main() {
     float y = gl_Vertex.y;
     float z = height(x,y);
     
-    pos = vec3(x,y,z);
     gl_Position = gl_ModelViewProjectionMatrix * vec4(x,y,z,1);
+    gl_FrontColor = gl_Color;
 }
