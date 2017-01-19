@@ -2,12 +2,9 @@ package robotrace;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 import static java.lang.Math.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 import static javax.media.opengl.GL2.*;
-import static javax.media.opengl.GL3.GL_TIMESTAMP;
 
 /**
 * Represents a Robot, to be implemented according to the Assignments.
@@ -27,18 +24,29 @@ class Robot {
     private final Material material;
     
     public float diff = 0f;
+    public float sprintAmount;
+    public float sprintSpeed;
 
     /**
      * Constructs the robot with initial parameters.
      */
     public Robot(Material material) {
         this.material = material;    
+        sprintAmount = (float)Math.random() * 0.5f + 0.3f;
+        sprintSpeed = (float)Math.random()*0.01f;
+    }
+    
+    private void calculateDiff(float tAnim) {
+        if (Math.cos(tAnim * sprintAmount) > 0.5){
+            diff += sprintSpeed;
+        }
     }
 
     /**
      * Draws this robot (as a {@code stickfigure} if specified).
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim, GlobalState gs) {
+        calculateDiff(tAnim);
         
         gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, this.material.diffuse, 0);
         gl.glMaterialfv(GL_FRONT, GL_SPECULAR, this.material.specular, 0);

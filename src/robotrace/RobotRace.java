@@ -190,7 +190,13 @@ public class RobotRace extends Base {
                
         // Update the view according to the camera mode and robot of interest.
         // For camera modes 1 to 4, determine which robot to focus on.
-        camera.update(gs, robots[0]);
+        int lastRobot = 0;
+        for(int i=1; i<robots.length; i++) {
+            if (robots[i].diff < robots[lastRobot].diff){
+                lastRobot = i;
+            }
+        }
+        camera.update(gs, robots[lastRobot]);
         glu.gluLookAt(camera.eye.x(),    camera.eye.y(),    camera.eye.z(),
                       camera.center.x(), camera.center.y(), camera.center.z(),
                       camera.up.x(),     camera.up.y(),     camera.up.z());
@@ -232,7 +238,7 @@ public class RobotRace extends Base {
         gl.glUseProgram(robotShader.getProgramID()); 
         
         for (int i = 0; i < robots.length; i++) {
-            float time = gs.tAnim / 30;
+            float time = (gs.tAnim + robots[i].diff)/30f;
             robots[i].position = raceTracks[gs.trackNr].getLanePoint(i, time);
             robots[i].direction = raceTracks[gs.trackNr].getLaneTangent(i, time).cross(Vector.Z);
             robots[i].draw(gl, glu, glut, time, gs);
